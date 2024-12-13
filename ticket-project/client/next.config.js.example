@@ -1,0 +1,4 @@
+export function webpack(config) {
+    config.watchOptions.pool = 3000;
+    return config;
+}

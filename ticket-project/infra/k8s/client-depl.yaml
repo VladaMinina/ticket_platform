@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels: #ensures that the Deployment is tied to Pods with the label app: auth.
+        app: client
+    spec:
+      containers:
+        - name: client #this is for logging purpose
+          image: vladaminina/client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: client # Corrected to be a map
+  ports:
+    - name: client #not important (for loging)
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
