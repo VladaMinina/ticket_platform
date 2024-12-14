@@ -6,11 +6,13 @@ export default ({url, method, body, onSuccess}) => {
 
     const doRequest = async() => {
         try{
-            setErrors([]);
-            const response = await axios[method](url, body);
-            console.log(response.data);
+            setErrors([]); // Reset errors
+
+        const response = await axios[method](url, body); // Axios request
+
             onSuccess();
-            return response.data;
+
+        return response.data;
         } catch(err) {
             setErrors(
             <div className="alert alert-danger">

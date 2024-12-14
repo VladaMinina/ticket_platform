@@ -1,10 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
 
 import buildClient from '../api/build-client';
+import Header from '../components/header';
 
-const AppComponent =  ({ Component, pageProps }) => {
+const AppComponent =  ({ Component, pageProps, currentUser }) => {
     return (
-        <div><Component {...pageProps}/></div>)
+        <div>
+            <Header currentUser={currentUser}/>
+            <Component {...pageProps}/></div>)
 }
 AppComponent.getInitialProps = async (appContext) => {
     console.log("AppComponent running...");
@@ -19,7 +22,7 @@ AppComponent.getInitialProps = async (appContext) => {
                 pageProps = await appContext.Component.getInitialProps(appContext.ctx);//manually call landing page
             }
             console.log("current user for landing from __app: ", pageProps);
-            return res.data;
+            return {pageProps, ...res.data};
         })
         .catch((err) => {
             console.error("Error fetching current user:");
