@@ -6,20 +6,27 @@ const AppComponent =  ({ Component, pageProps }) => {
     return (
         <div><Component {...pageProps}/></div>)
 }
-
-AppComponent.getInintialProps = async ( appContext) => {
-    console.log(Ogject.keys(appContext));
-    const client = buildClient(appContext.ctx);
-
-    console.log(appContext.ctx.req ? appContext.ctx.req.headers : 'No headers');
-  
+AppComponent.getInitialProps = async (appContext) => {
+    console.log("AppComponent running...");
+    console.log(appContext.ctx.req ? "Running on server" : "Running on client");
+    
     return buildClient(appContext.ctx)
         .get('/api/users/currentuser')
-        .then((res) => res.data) // Extract and return the data
+        .then(async (res) => {
+            console.log("Fetched data:", res.data);
+            let pageProps = {}
+            if (appContext.Component.getInitialProps) { //handling case whan you use singin page and signup page that dont have getInitProps
+                pageProps = await appContext.Component.getInitialProps(appContext.ctx);//manually call landing page
+            }
+            console.log("current user for landing from __app: ", pageProps);
+            return res.data;
+        })
         .catch((err) => {
-            console.error('Error fetching current user:', err);
+            console.error("Error fetching current user:");
             return { currentUser: null }; // Fallback response
         });
-}
+};
+
+
 
 export default AppComponent;
