@@ -7,7 +7,7 @@ const AppComponent =  ({ Component, pageProps }) => {
         <div><Component {...pageProps}/></div>)
 }
 
-AppComponent.getInintialProps = async (appContext) => {
+AppComponent.getInintialProps = async ( appContext) => {
     console.log(Ogject.keys(appContext));
     const client = buildClient(appContext.ctx);
 
