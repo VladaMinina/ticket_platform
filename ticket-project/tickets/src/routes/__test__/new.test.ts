@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {app} from '../../app'
-
+import { Ticket } from '../../models/ticket';
 it('router to /api/tickets for post', async () => {
     const response = await request(app)
         .post('/api/tickets')
@@ -63,6 +63,9 @@ await request(app)
 
 it('creates ticket', async () => {
     // TODO: add check to be sure that ticket was saved in DB
+    let tickets = await Ticket.find({});
+    expect(tickets.length).toEqual(0);
+
     await request(app)
         .post('/api/tickets')
         .set('Cookie', global.getCookie())
@@ -71,4 +74,8 @@ it('creates ticket', async () => {
             price: 20
         })
         .expect(201);
+    
+    tickets = await Ticket.find({});
+    expect(tickets.length).toEqual(1);
+    expect(tickets[0].price).toEqual(20);
 });
