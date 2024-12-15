@@ -16,6 +16,8 @@ spec:
         - name: auth #this is for logging purpose
           image: vladaminina/auth
           env:
+            - name: MONGO_URI
+              value: "mongodb://auth-mongo-srv:27017/auth"
             - name: JWT_KEY #inside container
               valueFrom:
                 secretKeyRef: #from secret

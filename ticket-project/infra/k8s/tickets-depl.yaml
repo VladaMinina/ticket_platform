@@ -16,6 +16,8 @@ spec:
         - name: tickets #this is for logging purpose
           image: vladaminina/tickets
           env:
+            - name: MONGO_URI
+              value: "mongodb://tickets-mongo-srv:27017/tickets"
             - name: JWT_KEY #inside container
               valueFrom:
                 secretKeyRef: #from secret
