@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { User } from '../models/user';
-import { BadRequestError } from '../errors/bad-request-error';
+import { BadRequestError } from '@vm-kvitki/common-lib';
 import jwt from 'jsonwebtoken';
 
 const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

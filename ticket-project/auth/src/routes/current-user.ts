@@ -1,7 +1,6 @@
 import express from 'express';
 import {currentUser} from '../controllers/current-user-controller';
-import {currentUserMid} from '../middleware/currrent-user';
-import { requireAuth } from '../middleware/require-auth';
+import {currentUserMid, requireAuth} from '@vm-kvitki/common-lib';
 
 const router = express.Router();
 

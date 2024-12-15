@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      labels: #ensures that the Deployment is tied to Pods with the label app: auth.
+        app: tickets
+    spec:
+      containers:
+        - name: tickets #this is for logging purpose
+          image: vladaminina/tickets
+          env:
+            - name: JWT_KEY #inside container
+              valueFrom:
+                secretKeyRef: #from secret
+                  name: jwt-secret #spesify whan run command kubectl create secret generic jwt-secret --from-literal=JWT_KEY=vlada
+                  key: JWT_KEY #provided in command
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { User } from '../models/user';
 import {Password} from '../services/password';
-import { BadRequestError } from '../errors/bad-request-error';
+import { BadRequestError } from '@vm-kvitki/common-lib';
 
 const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

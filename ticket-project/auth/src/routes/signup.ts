@@ -2,7 +2,7 @@ import express from 'express';
 import { body } from 'express-validator'
 
 import {signup} from '../controllers/signup-controller';
-import { validateRequest } from '../middleware/validate-request';
+import { validateRequest } from '@vm-kvitki/common-lib';
 
 const router = express.Router();
 

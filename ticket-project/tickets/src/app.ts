@@ -2,10 +2,6 @@ import express from 'express';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
-import { currentUserRouter } from './routes/current-user';
-import { signoutRouter } from './routes/signout';
-import { signinRouter } from './routes/signin';
-import { signupRouter } from './routes/signup';
 import { errorHandler,NotFoundError } from '@vm-kvitki/common-lib';
 
 import 'express-async-errors';
@@ -21,11 +17,7 @@ app.use(
     })
 );
 
-app.use(currentUserRouter);
-app.use(signinRouter);
-app.use(signoutRouter);
-app.use(signupRouter);
-console.log("going");
+
 app.all('*', async(req, res) => {
     throw new NotFoundError();
 })
