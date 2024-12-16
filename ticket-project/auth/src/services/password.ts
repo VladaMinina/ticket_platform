@@ -1,4 +1,4 @@
-import {scrypt, randomBytes} from 'crypto';
+import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
 
 const scryptAsynch = promisify(scrypt);
