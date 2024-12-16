@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: nats
-  tamplate:
+  template:
     metadata:
       labels:
         app: nats
@@ -41,9 +41,9 @@ spec:
     app: nats
   ports:
     - name: client
-      protocol: TCH
+      protocol: TCP
       port: 4222
-      targetPors: 4222
+      targetPort: 4222
     - name: monitoring
       protocol: TCP
       port: 8222
