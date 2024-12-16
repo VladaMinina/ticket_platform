@@ -9,6 +9,11 @@ const stan = nats.connect('ticketing', 'abc', {
 stan.on('connect', () => {
     console.log("Publisher connected to NATS");
 
+    stan.on('close', () =>{
+        console.log('NATS closing publisher');
+        process.exit();
+    })
+
     const data = {
         id: '12',
         title: 'ticket',
@@ -22,5 +27,12 @@ stan.on('connect', () => {
             "ticket:created data was published!"
         );
     })
+});
+
+process.on('SIGINT', () => {
+    stan.close();
+})
+process.on('SIGTERM', () => {
+    stan.close();
 })
 
