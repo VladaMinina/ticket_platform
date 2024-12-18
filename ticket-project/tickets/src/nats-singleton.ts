@@ -7,7 +7,7 @@ class NatsWrapper {
         if(!this._client) {
             throw new Error('Cannot access NATD client before connection');
         }
-        return this.client;
+        return this._client;
     }
 
     connect(clusterId: string, clientId: string, url: string) {

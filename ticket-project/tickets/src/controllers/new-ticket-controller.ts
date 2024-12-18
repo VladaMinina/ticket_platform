@@ -4,6 +4,7 @@ import {TicketCreatedPublisher} from '../events/publishers/ticket-created-publis
 import {natsWrapper} from '../nats-singleton';
 
 export const newTicketController = async( req: Request, res: Response ) => {
+    console.log('I am inside');
     const {title, price}  = req.body;
 
     const ticket = Ticket.build({
@@ -12,6 +13,7 @@ export const newTicketController = async( req: Request, res: Response ) => {
         userId: req.currentUser!.id,
     });
     await ticket.save();
+    console.log('Saved');
     await new TicketCreatedPublisher(natsWrapper.client).publish({
         id: ticket.id,
         title: ticket.title,
