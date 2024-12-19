@@ -4,10 +4,10 @@ import cookieSession from 'cookie-session';
 
 import { errorHandler,NotFoundError, currentUserMid } from '@vm-kvitki/common-lib';
 import 'express-async-errors';
-import { deleteOrderRouter } from '../routes/delete';
-import { showOrderRouter } from '../routes/show';
-import { indexOrderRouter } from '../routes';
-import { newOrderRouter } from '../routes/new';
+import { deleteOrderRouter } from './routes/delete';
+import { showOrderRouter } from './routes/show';
+import { indexOrderRouter } from './routes';
+import { newOrderRouter } from './routes/new';
 
 const app = express();
 app.set('trust proxy', true); //use it cause you are using express ingress-injnex
