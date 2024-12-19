@@ -1,5 +1,6 @@
 import request from 'supertest';
 import {app} from '../../app';
+import {natsWrapper} from '../../nats-singleton';
 
 const createTicket = async(title: string, price:number) => {
     return await request(app)
@@ -91,4 +92,26 @@ it('success update with valid parameters', async() => {
 
     expect(ticketResponce.body.title).toEqual('new title');
     expect(ticketResponce.body.price).toEqual(1000);
+})
+
+it('mock funcktion was called', async () => {
+    const userCookie = global.getCookie();
+    const ticket = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', userCookie)
+    .send({
+        title: 'old title', 
+        price: 20
+ })
+ await request(app)
+        .put(`/api/tickets/${ticket.body.id}`)
+        .set('Cookie', userCookie)
+        .send({
+            title: 'new title',
+            price: 1000
+        })
+    .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+    expect(natsWrapper.client.publish).toHaveBeenCalledTimes(2);
 })

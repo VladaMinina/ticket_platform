@@ -19,12 +19,14 @@ export const updateTicket = async (req: Request, res: Response): Promise<void> =
         price: req.body.price,
     });
     await ticket.save();
-    console.log(ticket);    
+    console.log(ticket);   
+     
     await new TicketUpdatedPublisher(natsWrapper.client).publish({
             id: ticket.id,
             title: ticket.title,
             price: ticket.price,
             userId: ticket.userId,
     });
+
     res.send(ticket);
 }
