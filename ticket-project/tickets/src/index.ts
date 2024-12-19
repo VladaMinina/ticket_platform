@@ -9,9 +9,16 @@ const start = async() => {
     if(!process.env.MONGO_URI) {
         throw new Error('MONGO_URI must be provided');
     }
+    if(!process.env.NATS_CLUSTER_ID || 
+        !process.env.NATS_URL || 
+        !process.env.NATS_CLIENT_ID ) {
+            throw new Error('Variables for NATS service vas not proveded');
+        }
 
     try {
-        await natsWrapper.connect('ticketing', '1234567', 'http://nats-srv:4222');
+        await natsWrapper.connect(process.env.NATS_CLUSTER_ID, 
+                                    process.env.NATS_CLIENT_ID, 
+                                    process.env.NATS_URL);
         natsWrapper.client.on('close', () => {
             console.log('NATS connection closed!');
             process.exit();

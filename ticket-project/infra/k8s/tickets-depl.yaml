@@ -16,6 +16,10 @@ spec:
         - name: tickets #this is for logging purpose
           image: vladaminina/tickets
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: MONGO_URI
               value: "mongodb://tickets-mongo-srv:27017/tickets"
             - name: JWT_KEY #inside container
@@ -23,6 +27,11 @@ spec:
                 secretKeyRef: #from secret
                   name: jwt-secret #spesify whan run command kubectl create secret generic jwt-secret --from-literal=JWT_KEY=vlada
                   key: JWT_KEY #provided in command
+            - name: "NATS_URL"
+              value: "http://nats-srv:4222"
+            - name: "NATS_CLUSTER_ID"
+              value: "ticketing"
+
 ---
 apiVersion: v1
 kind: Service
