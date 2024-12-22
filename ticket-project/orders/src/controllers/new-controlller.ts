@@ -2,6 +2,8 @@ import {Request, Response, NextFunction} from 'express';
 import { Order } from '../models/order';
 import {Ticket} from '../models/ticket';
 import { BadRequestError, NotFoundError, OrderStatus } from '@vm-kvitki/common-lib';
+import {natsWrapper} from '../nats-singleton';
+import {OrderCreatedPublisher} from '../events/order-created-publisher';
 
 const EXPIRATION_WINDOW = 15 * 60;
 
@@ -28,6 +30,17 @@ export const newOrderController = async (req: Request, res: Response, next: Next
         status: OrderStatus.Created,
         expiresAt: expiration,
         ticket
+    });
+
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+        id: order.id,
+        status: order.status,
+        userId: order.userId,
+        expiresAt: order.expiresAt.toISOString(),//UTC timeStanp
+        ticket: {
+            id: ticket.id,
+            price: ticket.price,
+        }
     })
     //publish an event
     await order.save();
