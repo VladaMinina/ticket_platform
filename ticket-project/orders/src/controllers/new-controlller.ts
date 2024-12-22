@@ -14,7 +14,7 @@ export const newOrderController = async (req: Request, res: Response, next: Next
     }
     //find ticket
     //ensure it is not reserved (if ticket found in orders and status NOT cenceled)
-    const isReserved = await ticket.isResserved();
+    const isReserved = await ticket.isReserved();
     
     if(isReserved) {
         throw new BadRequestError('Ticket is already reserved');
@@ -31,6 +31,6 @@ export const newOrderController = async (req: Request, res: Response, next: Next
     })
     //publish an event
     await order.save();
-    
+    console.log('New order successfully created');
     res.status(201).send(order);
 }
