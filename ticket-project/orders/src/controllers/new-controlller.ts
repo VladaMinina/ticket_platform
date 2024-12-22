@@ -40,8 +40,7 @@ export const newOrderController = async (req: Request, res: Response, next: Next
         ticket: {
             id: ticket.id,
             price: ticket.price,
-        }
-    })
+    }})
     //publish an event
     await order.save();
     console.log('New order successfully created');

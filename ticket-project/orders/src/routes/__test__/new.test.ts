@@ -2,6 +2,7 @@ import request from 'supertest';
 import {app} from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-singleton';
 
 it('returns error if ticket does not exists', async () => {
     const ticketId = global.getObjectId();
@@ -53,4 +54,21 @@ it('success reserve ticket', async () => {
         .expect(201)
 });
 
-it.todo('emit event')
+it('publish event OrderCreated', async () => {
+    const cookeie = global.getCookie();
+
+    const ticket = Ticket.build({
+        title: 'NEW',
+        price: 20
+    });
+
+    await ticket.save();
+
+    await request(app)
+        .post('/api/orders')
+        .set('Cookie', cookeie)
+        .send({ticketId: ticket.id})
+        .expect(201)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+})

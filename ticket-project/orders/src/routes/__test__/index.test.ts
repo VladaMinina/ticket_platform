@@ -12,17 +12,6 @@ const createTicket = async(title: string, price: number) => {
     await ticket.save();
     return ticket;
 };
-const createOrder = async(ticket: TicketDoc, userId: string ) => {
-    const order =  Order.build({
-        ticket,
-        userId,
-        status: OrderStatus.Created,
-        expiresAt:  new Date(Date.now() + 6000 * 1000),
-    });
-
-    await order.save();
-    return order;
-}
 
 it('successfully fetch orders for particular user', async () => {
     const userOne = global.getCookie();
