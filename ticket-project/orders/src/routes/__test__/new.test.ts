@@ -18,7 +18,8 @@ it('returns error if ticket does not exists', async () => {
 it('returns error if ticket reserved', async () => {
     const ticket = Ticket.build({
         title: 'NEW',
-        price: 20
+        price: 20,
+        id: global.getObjectId()
     });
 
     await ticket.save();
@@ -42,7 +43,8 @@ it('success reserve ticket', async () => {
 
     const ticket = Ticket.build({
         title: 'NEW',
-        price: 20
+        price: 20, 
+        id: global.getObjectId()
     });
 
     await ticket.save();
@@ -59,7 +61,8 @@ it('publish event OrderCreated', async () => {
 
     const ticket = Ticket.build({
         title: 'NEW',
-        price: 20
+        price: 20,
+        id: getObjectId()
     });
 
     await ticket.save();

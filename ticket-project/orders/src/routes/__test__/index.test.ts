@@ -6,7 +6,8 @@ import { Ticket, TicketDoc } from '../../models/ticket';
 const createTicket = async(title: string, price: number) => {
     const ticket =  Ticket.build({
         title,
-        price
+        price,
+        id: global.getObjectId()
     });
 
     await ticket.save();

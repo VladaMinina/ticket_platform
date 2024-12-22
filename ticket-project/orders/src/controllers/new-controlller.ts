@@ -3,7 +3,7 @@ import { Order } from '../models/order';
 import {Ticket} from '../models/ticket';
 import { BadRequestError, NotFoundError, OrderStatus } from '@vm-kvitki/common-lib';
 import {natsWrapper} from '../nats-singleton';
-import {OrderCreatedPublisher} from '../events/order-created-publisher';
+import {OrderCreatedPublisher} from '../events/publishers/order-created-publisher';
 
 const EXPIRATION_WINDOW = 15 * 60;
 

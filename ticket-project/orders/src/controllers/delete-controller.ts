@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
 import { Order, OrderStatus } from '../models/order';
 import { NotAutorizedError, NotFoundError } from '@vm-kvitki/common-lib';
-import { OrderCancelledPublisher } from '../events/order-cancelled-publisher';
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 import { natsWrapper } from '../nats-singleton';
 
 export const deleteOrderController = async(req: Request, res: Response, next: NextFunction) => {
