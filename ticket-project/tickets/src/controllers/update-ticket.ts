@@ -3,9 +3,10 @@ import {Ticket} from '../models/ticket';
 import { NotAutorizedError, NotFoundError } from '@vm-kvitki/common-lib';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper} from '../nats-singleton';
+import { TicketDoc } from '../models/ticket';
 
 export const updateTicket = async (req: Request, res: Response): Promise<void> => {
-    const ticket = await Ticket.findById(req.params.id)
+    const ticket = await Ticket.findById(req.params.id) as TicketDoc;
     if(!ticket){
         throw new NotFoundError();
     }
@@ -26,6 +27,7 @@ export const updateTicket = async (req: Request, res: Response): Promise<void> =
             title: ticket.title,
             price: ticket.price,
             userId: ticket.userId,
+            version: ticket.version,
     });
 
     res.send(ticket);
