@@ -37,6 +37,7 @@ export const newOrderController = async (req: Request, res: Response, next: Next
         status: order.status,
         userId: order.userId,
         expiresAt: order.expiresAt.toISOString(),//UTC timeStanp
+        version: order.version,
         ticket: {
             id: ticket.id,
             price: ticket.price,
