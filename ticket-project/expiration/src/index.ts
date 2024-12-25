@@ -1,5 +1,5 @@
 import { natsWrapper } from './nats-singleton';
-
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 const start = async() => {
     if(!process.env.NATS_CLUSTER_ID || 
         !process.env.NATS_URL || 
@@ -20,6 +20,7 @@ const start = async() => {
 
         process.on('SIGINT', () => {natsWrapper.client.close()});
         process.on('SIGTERM', () => {natsWrapper.client.close()});
+        new OrderCreatedListener(natsWrapper.client).listen();
     } catch (err) {
         console.log(err);
     }
