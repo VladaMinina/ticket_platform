@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {Ticket} from '../models/ticket';
-import { NotAutorizedError, NotFoundError } from '@vm-kvitki/common-lib';
+import { BadRequestError, NotAutorizedError, NotFoundError } from '@vm-kvitki/common-lib';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper} from '../nats-singleton';
 import { TicketDoc } from '../models/ticket';
@@ -13,6 +13,10 @@ export const updateTicket = async (req: Request, res: Response): Promise<void> =
 
     if(ticket.userId !== req.currentUser!.id) {
         throw new NotAutorizedError();
+    }
+
+    if(ticket.orderId) {
+        throw new BadRequestError('This ticket have been already reserved');
     }
 
     ticket.set({

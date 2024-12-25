@@ -1,6 +1,7 @@
 import request from 'supertest';
 import {app} from '../../app';
 import {natsWrapper} from '../../nats-singleton';
+import { Ticket } from '../../models/ticket';
 
 const createTicket = async(title: string, price:number) => {
     return await request(app)
@@ -114,4 +115,28 @@ it('mock funcktion was called', async () => {
 
     expect(natsWrapper.client.publish).toHaveBeenCalled();
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(2);
+})
+
+it('rejects update ticket that is recerved', async () => {
+    const userCookie = global.getCookie();
+    const ticket = await request(app)
+        .post('/api/tickets')
+        .set('Cookie', userCookie)
+        .send({
+            title: 'old title', 
+            price: 20
+     })
+
+    const ticketDoc = await Ticket.findById(ticket.body.id);
+    ticketDoc!.set({orderId: global.getObjectId()});
+    await ticketDoc!.save();
+
+    await request(app)
+        .put(`/api/tickets/${ticket.body.id}`)
+        .set('Cookie', userCookie)
+        .send({
+            title: 'new update',
+            price: 70
+        })
+    .expect(400);
 })
