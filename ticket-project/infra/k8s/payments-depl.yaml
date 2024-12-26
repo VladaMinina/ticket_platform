@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels: #ensures that the Deployment is tied to Pods with the label app: auth.
+        app: payments
+    spec:
+      containers:
+        - name: payments #this is for logging purpose
+          image: vladaminina/payments
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MONGO_URI
+              value: "mongodb://payments-mongo-srv:27017/payments"
+            - name: STRIPE_KEY #inside container
+              valueFrom:
+                secretKeyRef: #from secret
+                  name: stripe-secret #spesify whan run command: kubectl create secret generic jwt-secret --from-literal=JWT_KEY=vlada
+                  key: STRIPE_KEY #provided in command
+            - name: JWT_KEY #inside container
+              valueFrom:
+                secretKeyRef: #from secret
+                  name: jwt-secret #spesify whan run command kubectl create secret generic jwt-secret --from-literal=JWT_KEY=vlada
+                  key: JWT_KEY #provided in command
+            - name: "NATS_URL"
+              value: "http://nats-srv:4222"
+            - name: "NATS_CLUSTER_ID"
+              value: "ticketing"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: payments
+  ports:
+    - name: payments
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -51,7 +51,7 @@ it('emits event expiration:complete', async () => {
     expect(natsWrapper.client.publish).toHaveBeenCalled();
 
     const dataEvent = JSON.parse(
-        (natsWrapper.client.publish as jest.Mock).mock.calls[0][1] //[0][0] -> chanel whwre we posted
+        (natsWrapper.client.publish as jest.Mock).mock.calls[0][1] //[0][0] -> chanel where we posted
     );
     expect(dataEvent.id)
 })
