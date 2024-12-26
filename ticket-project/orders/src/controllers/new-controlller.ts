@@ -5,7 +5,7 @@ import { BadRequestError, NotFoundError, OrderStatus } from '@vm-kvitki/common-l
 import {natsWrapper} from '../nats-singleton';
 import {OrderCreatedPublisher} from '../events/publishers/order-created-publisher';
 
-const EXPIRATION_WINDOW = 15 * 60;
+const EXPIRATION_WINDOW = 1 * 60;
 
 export const newOrderController = async (req: Request, res: Response, next: NextFunction) => {
     const {ticketId} = req.body;
