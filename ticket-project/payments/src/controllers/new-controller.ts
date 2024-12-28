@@ -21,6 +21,7 @@ export const newController = async (req: Request, res: Response, next: NextFunct
         if(order.status === OrderStatus.Cancelled) {
             throw new BadRequestError('Order was cancelled');
         }
+        console.log('Calling stripe.charges.create...');
 
         await stripe.charges.create({
             currency: 'usd',
@@ -28,9 +29,10 @@ export const newController = async (req: Request, res: Response, next: NextFunct
             source: token
         });
 
-        console.log('New controller');
-        res.send({ success: true });
+        console.log('Stripe charge created');
+        res.status(201).send({ success: true });
     } catch(err) {
+        console.log(err);
         next(err);
     }
 }

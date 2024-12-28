@@ -5,7 +5,7 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 
 declare global{
-    var getCookie: () => string[];
+    var getCookie: (userId?: string) => string[];
     var getObjectId:() => string;
 }
 
@@ -44,11 +44,25 @@ global.getObjectId = () => {
     return new mongoose.Types.ObjectId().toHexString();;
 }
 
-global.getCookie = () => {
+// global.getCookie = () => {
+//     const payload = {
+//         email: 'test@test.com',
+//         id: getObjectId()
+//     }
+
+//     const token = jwt.sign(payload, process.env.JWT_KEY!);
+//     const session = { jwt: token };
+//     const sessionJSON = JSON.stringify(session);
+//     const  base64 = Buffer.from(sessionJSON).toString('base64');
+
+//     return [`session=${base64}`];
+// }
+
+global.getCookie = (userId?: string) => {
     const payload = {
+        id: userId || global.getObjectId(), // Use the passed userId or generate one
         email: 'test@test.com',
-        id: getObjectId()
-    }
+    };
 
     const token = jwt.sign(payload, process.env.JWT_KEY!);
     const session = { jwt: token };
@@ -56,4 +70,4 @@ global.getCookie = () => {
     const  base64 = Buffer.from(sessionJSON).toString('base64');
 
     return [`session=${base64}`];
-}
+};
