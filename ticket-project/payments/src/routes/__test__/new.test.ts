@@ -3,6 +3,7 @@ import {app} from '../../app';
 import { Order } from '../../models/orders';
 import { OrderStatus } from '@vm-kvitki/common-lib';
 import { stripe } from '../../stripe';
+import { Payment } from '../../models/payment';
 
 it('returns 404 for purchasing that doesnt exist', async() => {
     await request(app)
@@ -83,9 +84,15 @@ it('returns 201 with valid inputs', async () => {
         .expect(201);
 
     const stripeChargesList = await stripe.charges.list({ limit: 40 });
-    const stripeCharges = stripeChargesList.data.find(charge => {
+    const stripeCharge = stripeChargesList.data.find(charge => {
         return charge.amount === price * 100
     })
-    expect(stripeCharges).toBeDefined();
-    expect(stripeCharges!.currency).toBe('usd');
+    expect(stripeCharge).toBeDefined();
+    expect(stripeCharge!.currency).toBe('usd');
+    const payment = Payment.findOne({
+        orderId: order.id,
+        stripeId: stripeCharge!.id,
+    })
+
+    expect(payment).not.toBeNull();
 });

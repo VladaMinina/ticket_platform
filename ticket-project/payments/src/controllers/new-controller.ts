@@ -2,6 +2,7 @@ import { Request, Response, NextFunction} from 'express';
 import {Order} from '../models/orders';
 import { BadRequestError, NotAutorizedError, NotFoundError, OrderStatus } from '@vm-kvitki/common-lib';
 import { stripe } from '../stripe';
+import { Payment } from '../models/payment';
 
 export const newController = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -23,11 +24,16 @@ export const newController = async (req: Request, res: Response, next: NextFunct
         }
         console.log('Calling stripe.charges.create...');
 
-        await stripe.charges.create({
+        const charge = await stripe.charges.create({
             currency: 'usd',
             amount: order.price * 100,
             source: token
         });
+
+        const payment = Payment.build({
+            orderId,
+            stripeId: charge.id
+        })
 
         console.log('Stripe charge created');
         res.status(201).send({ success: true });

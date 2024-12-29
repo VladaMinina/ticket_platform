@@ -1,12 +1,12 @@
 import mongoose, { mongo } from 'mongoose';
 
 interface PaymentAttrs {
-    odrerId: string,
+    orderId: string,
     stripeId: string
 }
 
 interface PaymentDoc extends mongoose.Document {
-    odrerId: string,
+    orderId: string,
     stripeId: string
 }
 
@@ -35,7 +35,7 @@ const paymentSchema = new mongoose.Schema({
 
 paymentSchema.statics.build = (attrs: PaymentAttrs) => {
     return new Payment({
-        orderId: attrs.odrerId,
+        orderId: attrs.orderId,
         stripeId: attrs
     })
 }
