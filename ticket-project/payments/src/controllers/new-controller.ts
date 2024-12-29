@@ -3,6 +3,8 @@ import {Order} from '../models/orders';
 import { BadRequestError, NotAutorizedError, NotFoundError, OrderStatus } from '@vm-kvitki/common-lib';
 import { stripe } from '../stripe';
 import { Payment } from '../models/payment';
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher';
+import { natsWrapper } from '../nats-singleton';
 
 export const newController = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -34,9 +36,16 @@ export const newController = async (req: Request, res: Response, next: NextFunct
             orderId,
             stripeId: charge.id
         })
+        await payment.save();
+
+        await new PaymentCreatedPublisher(natsWrapper.client).publish({
+            id: payment.id,
+            orderId: payment.orderId,
+            stripeId: charge.id,
+        })
 
         console.log('Stripe charge created');
-        res.status(201).send({ success: true });
+        res.status(201).send({ payment });
     } catch(err) {
         console.log(err);
         next(err);
