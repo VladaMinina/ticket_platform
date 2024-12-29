@@ -23,6 +23,8 @@ beforeAll(async () => {
     console.log('Connected to MongoMemoryServer');
 });
 
+process.env.STRIPE_KEY = 'sk_test_51QaI1LIeVDaGAabHFSXKpZySUiuFUW2arKkmeqtQn0BF9N6ddVCODiAIVIIE1F65vWYv4FFUCYwed0sZYT0woApX00zqGUTQZz'
+
 beforeEach(async() => {
     jest.clearAllMocks();
     if(mongoose.connection.db){
