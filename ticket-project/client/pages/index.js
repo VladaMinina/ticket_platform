@@ -7,8 +7,8 @@ const Landing = ({ currentUser }) => {
     <h1>You are NOT signed in</h1>
   );
 };
-//contecst -> add in addition headers and others props from the browser
-Landing.getInitialProps = async (context) => {
+//context -> add in addition headers and others props from the browser
+Landing.getInitialProps = async (context, client, currentUser) => {
   return {};
 };
 
