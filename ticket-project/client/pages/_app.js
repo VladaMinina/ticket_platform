@@ -7,7 +7,9 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component currentUser={currentUser} {...pageProps} />
+      <div className="container">
+        <Component currentUser={currentUser} {...pageProps} />
+      </div>
     </div>
   );
 };
@@ -20,21 +22,22 @@ AppComponent.getInitialProps = async (appContext) => {
     .get("/api/users/currentuser")
     .then(async (res) => {
       console.log("Fetched data:", res.data);
+      const { currentUser } = res.data; // Extract currentUser properly
       let pageProps = {};
       if (appContext.Component.getInitialProps) {
-        //handling case whan you use singin page and signup page that dont have getInitProps
+        // Pass currentUser properly
         pageProps = await appContext.Component.getInitialProps(
           appContext.ctx,
           client,
-          data.currentUser
-        ); //manually call landing page
+          currentUser
+        );
       }
       console.log("current user for landing from __app: ", pageProps);
-      return { pageProps, ...res.data };
+      return { pageProps, currentUser }; // Return currentUser properly
     })
     .catch((err) => {
-      console.error("Error fetching current user:");
-      return { currentUser: null }; // Fallback response
+      console.error("Error fetching current user:", err.message);
+      return { pageProps: {}, currentUser: null }; // Ensure pageProps is returned even on error
     });
 };
 

@@ -1,6 +1,5 @@
-import buildClient from "../api/build-client";
-
 const Landing = ({ currentUser }) => {
+  console.log(currentUser);
   return currentUser ? (
     <h1>You are signed in</h1>
   ) : (
