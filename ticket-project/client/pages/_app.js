@@ -13,6 +13,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
     </div>
   );
 };
+
 AppComponent.getInitialProps = async (appContext) => {
   console.log("AppComponent running...");
   console.log(appContext.ctx.req ? "Running on server" : "Running on client");
