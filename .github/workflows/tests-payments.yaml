@@ -1,4 +1,4 @@
-name: tests
+name: tests-payments
 
 # when do we want to run it (create, update or reopen pool request)
 on: 
@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest # run on ubuntu OS
     steps:
       - uses: actions/checkout@v2 # take all code
-      - run: cd ticket-project/auth && npm install && npm run test:ci
+      - run: cd ticket-project/payments && npm install && npm run test:ci

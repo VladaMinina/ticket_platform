@@ -1,0 +1,12 @@
+name: tests-auth
+
+# when do we want to run it (create, update or reopen pool request)
+on: 
+  pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # run on ubuntu OS
+    steps:
+      - uses: actions/checkout@v2 # take all code
+      - run: cd ticket-project/auth && npm install && npm run test:ci
