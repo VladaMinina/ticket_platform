@@ -18,6 +18,7 @@ export const newController = async (
 ) => {
   try {
     const { token, orderId } = req.body;
+    console.log("DATA IN CONTROLLER: ", token, orderId);
 
     const order = await Order.findById(orderId);
 
@@ -41,10 +42,19 @@ export const newController = async (
       source: token,
     });
 
+    console.log("CHARGE ID: ", charge.id);
+
+    // Validate charge.id
+    if (typeof charge.id !== "string") {
+      throw new Error("Invalid stripeId format: Expected a string");
+    }
+
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,
     });
+
+    console.log("Saving Payment:", payment);
     await payment.save();
 
     await new PaymentCreatedPublisher(natsWrapper.client).publish({

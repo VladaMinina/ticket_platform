@@ -1,9 +1,26 @@
-const TicketShow = (ticket) => {
+import useRequest from "../../hooks/use-request";
+import Router from "next/router";
+
+const TicketShow = ({ ticket }) => {
+  const { doRequest, errors } = useRequest({
+    url: "/api/orders",
+    method: "post",
+    body: {
+      ticketId: ticket.id,
+    },
+    onSuccess: (order) => {
+      Router.push("/orders/[orderId]", `/orders/${order.id}`);
+    },
+  });
+
   return (
     <div>
       <h3>{ticket.title}</h3>
       <h4>Price: {ticket.price}</h4>
-      <button></button>
+      {errors}
+      <button onClick={(e) => doRequest()} className="btn btn-primary">
+        Purchase
+      </button>
     </div>
   );
 };

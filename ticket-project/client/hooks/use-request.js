@@ -4,17 +4,13 @@ import { useState } from "react";
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState([]);
 
-  const doRequest = async () => {
+  const doRequest = async (props = {}) => {
     try {
       setErrors([]); // Reset errors
-      console.log("before request");
-      const response = await axios[method](url, body); // Axios request
-      console.log("After request", response);
+      const response = await axios[method](url, { ...body, ...props }); // Axios request
 
       if (onSuccess) {
-        console.log("Before onSuccess");
         onSuccess(response.data);
-        console.log("After onSuccess");
       }
 
       return response.data;

@@ -5,7 +5,7 @@ const Landing = ({ currentUser, tickets }) => {
   console.log(currentUser);
   const ticketList = (tickets || []).map((ticket) => {
     return (
-      <tr>
+      <tr key={ticket.id}>
         <td>
           <Link href={`/tickets/[ticketId]`} as={`/tickets/${ticket.id}`}>
             {ticket.title}
