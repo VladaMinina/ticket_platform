@@ -1,8 +1,10 @@
 name: tests-tickets
 
 # when do we want to run it (create, update or reopen pool request)
-on: 
-  pull_request
+on:
+  pull_request:
+    paths:
+      - "ticket-project/tickets/**"
 
 jobs:
   build:
