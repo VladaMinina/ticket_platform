@@ -1,0 +1,25 @@
+name: deploy-client
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "ticket-project/client/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd ticket-project/client && docker build -t vladaminina/client .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push vladaminina/client
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing-platform # ticketing-platform that you set in digital ocean
+      - run: kubectl rollout restart deployment client-depl # says to restart deployment
